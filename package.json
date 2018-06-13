@@ -1,0 +1,17 @@
+{
+  "name": "xioaben-log-server",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "nodemon --harmony --inspect=7777 ./app.js"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "koa": "^2.5.1",
+    "koa-body": "^4.0.2",
+    "koa-onerror": "^4.0.0",
+    "koa-router": "^7.4.0",
+    "koa2-cors": "^2.0.5",
+    "monk": "^6.0.6",
+    "nodemon": "^1.17.5"
+  }
+}
