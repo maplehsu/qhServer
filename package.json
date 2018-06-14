@@ -8,9 +8,12 @@
     "axios": "^0.18.0",
     "koa": "^2.5.1",
     "koa-body": "^4.0.2",
+    "koa-multer": "^1.0.2",
     "koa-onerror": "^4.0.0",
     "koa-router": "^7.4.0",
+    "koa-static": "^4.0.3",
     "koa2-cors": "^2.0.5",
+    "moment": "^2.22.2",
     "monk": "^6.0.6",
     "nodemon": "^1.17.5"
   }

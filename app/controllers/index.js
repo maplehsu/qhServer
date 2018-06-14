@@ -1,4 +1,5 @@
 const config = require('../../config/index')
+const moment = require('moment')
 
 module.exports = {
   error: async (ctx, next) => {    
@@ -16,18 +17,35 @@ module.exports = {
     ctx.response.type = 'application/json'
     ctx.body = data
   },
-  path: async (ctx, next) => {
+  upload: async (ctx, next) => { 
+    console.log(ctx.req.file)
+    ctx.body = {  
+      filename: ctx.req.file.filename
+    }  
+  },
+  editPath: async (ctx, next) => {
     let db = config.db('xianlu')
-    let data = await db.find({})
+    let data = await db.update({"_id": ctx.request.body._id}, {$set: ctx.request.body})
+    ctx.response.type = 'application/json'
+    ctx.body = '修改成功'
+  },
+  deletePath: async (ctx, next) => {        
+    let db = config.db('xianlu')
+    let data = await db.remove({"_id": ctx.request.body._id})
+    ctx.response.type = 'application/json'
+    ctx.body = '删除成功'
+  },
+  getPath: async (ctx, next) => {
+    let db = config.db('xianlu')
+    let data = await db.find({},{sort: {creatTime: -1}})
     ctx.response.type = 'application/json'
     ctx.body = data
   },
   addPath: async (ctx, next) => {
-    console.log(ctx.request.body);
-    let data = ctx.request.body
-    // let db = config.db('xianlu')
-    // let data = await db.find({})
+    let db = config.db('xianlu')
+    ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm:ss')
+    let data = await db.insert(ctx.request.body)
     ctx.response.type = 'application/json'
-    ctx.body = data
+    ctx.body = '提交成功'
   },
 }
