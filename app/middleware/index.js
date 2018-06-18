@@ -12,7 +12,7 @@ module.exports = (app) => {
         if (ctx.url === '/test') {
           return "*";
         }
-        return 'http://localhost:8081';
+        return '*';
       },
       exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
       maxAge: 5,

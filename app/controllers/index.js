@@ -18,7 +18,6 @@ module.exports = {
     ctx.body = data
   },
   upload: async (ctx, next) => { 
-    console.log(ctx.req.file)
     ctx.body = {  
       filename: ctx.req.file.filename
     }  
@@ -41,6 +40,12 @@ module.exports = {
     ctx.response.type = 'application/json'
     ctx.body = data
   },
+  getInfo: async (ctx, next) => {
+    let db = config.db('xianlu')
+    let data = await db.find({"_id": ctx.request.body._id})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
   addPath: async (ctx, next) => {
     let db = config.db('xianlu')
     ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm:ss')
@@ -48,4 +53,7 @@ module.exports = {
     ctx.response.type = 'application/json'
     ctx.body = '提交成功'
   },
+  wx: async (ctx, next) => {
+    
+  }
 }
