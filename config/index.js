@@ -6,7 +6,9 @@ module.exports = {
     port: 7777
   },
   db: function (collection) {
-    const url = 'logdbuser:userlogdb@10.100.136.145:27017/logdb'
+    // 超级管理员 账号 admin 密码 admin
+    // qinghai数据库 账号 qinghai 密码 810600
+    const url = 'qinghai:810600@47.104.235.123:27017/qinghai'
     const db = monk(url)
     return db.get(collection)
   },

@@ -5,21 +5,6 @@ const koa2Req = require('koa2-request');
 
 
 module.exports = {
-  error: async (ctx, next) => {    
-    let db = config.db('xiaobenLog')
-    let data = await db.find({"meta.res.statusCode": 500},{sort: {timestamp: -1}})    
-    ctx.response.type = 'application/json'
-    ctx.body = data
-  },
-  host: async (ctx, next) => {    
-    let db = config.db('xiaobenLog')
-    let data = await db.aggregate([
-      {$group: {"_id": {"host": "$meta.req.headers.host"}, "total": {$sum: 1}}},
- 	    {"$sort": {total: -1}}
-    ])
-    ctx.response.type = 'application/json'
-    ctx.body = data
-  },
   upload: async (ctx, next) => { 
     ctx.body = {  
       filename: ctx.req.file.filename
@@ -85,8 +70,10 @@ module.exports = {
     let appSecret = config.appSecret
     let code = ctx.request.body.code
     let data = await koa2Req.get('https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + appID + '&secret=' + appSecret + '&code=' + code + '&grant_type=authorization_code')
-    let body = JSON.parse(data.body)    
+    let body = JSON.parse(data.body) 
     let user = await koa2Req.get('https://api.weixin.qq.com/sns/userinfo?access_token=' + body.access_token + '&openid=' + body.openid + '&lang=zh_CN')
+    user.body = JSON.parse(user.body) 
+    user.body.access_token = body.access_token
     ctx.response.type = 'application/json'
     ctx.body = user.body
   },
@@ -100,6 +87,12 @@ module.exports = {
   getReserve: async(ctx, next) => {
     let db = config.db('reserve')
     let data = await db.find({}, {sort: {creatTime: -1}})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
+  getUserReserve: async(ctx, next) => {
+    let db = config.db('reserve')    
+    let data = await db.find({"userID": ctx.request.body.userID},{sort: {creatTime: -1}})
     ctx.response.type = 'application/json'
     ctx.body = data
   }
