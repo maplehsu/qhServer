@@ -13,8 +13,6 @@ router.post('/addReserve', koaBody(), controller.addReserve)
 router.post('/getUserReserve', koaBody(), controller.getUserReserve)
 router.get('/getPath', controller.getPath)
 router.get('/getPathUser', controller.getPathUser)
-router.get('/error', controller.error)
-router.get('/getHost', controller.host)
 router.get('/getOauth', controller.oauth)
 router.get('/getReserve', controller.getReserve)
 

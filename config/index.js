@@ -29,7 +29,7 @@ module.exports = {
     const upload = multer({ storage: storage }); 
     return upload.single('file')
   },
-  appID: 'wx5e1f8a34134f4960',
-  appSecret: 'c3d8748ee90df827ceea4c176287b27d',
-  wxUrl: 'http://127.0.0.1:8080/'
+  appID: 'wxb6810f4880118c0b',
+  appSecret: 'e77a403e1619f33dda8a5ee83ab380ce',
+  wxUrl: 'http://www.izmqh.com/'
 }
