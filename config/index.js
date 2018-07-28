@@ -31,5 +31,5 @@ module.exports = {
   },
   appID: 'wxb6810f4880118c0b',
   appSecret: 'e77a403e1619f33dda8a5ee83ab380ce',
-  wxUrl: 'https://www.izmqh.com/'
+  wxUrl: 'http://www.izmqh.com/'
 }

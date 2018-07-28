@@ -2,6 +2,7 @@ const config = require('../../config/index')
 const urlencode = require('urlencode');
 const moment = require('moment')
 const koa2Req = require('koa2-request');
+const shortid = require('shortid');
 
 
 module.exports = {
@@ -24,7 +25,13 @@ module.exports = {
   },
   getPath: async (ctx, next) => {
     let db = config.db('xianlu')
-    let data = await db.find({},{sort: {creatTime: -1}})
+    let data = await db.find({"pathID": ctx.request.body.pathID})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
+  getPathList: async (ctx, next) => {
+    let db = config.db('xianlu')
+    let data = await db.find({}, {content: 0})
     ctx.response.type = 'application/json'
     ctx.body = data
   },
@@ -38,6 +45,9 @@ module.exports = {
           "foreignField": "title",
           "as": "reserve_docs"
         }
+      },
+      {
+      	$project: {"content":0}
       }
     ])    
     ctx.response.type = 'application/json'
@@ -52,7 +62,8 @@ module.exports = {
   addPath: async (ctx, next) => {
     let db = config.db('xianlu')
     ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm:ss')
-    let data = await db.insert(ctx.request.body)
+    ctx.request.body.pathID = shortid.generate()
+    db.insert(ctx.request.body)
     ctx.response.type = 'application/json'
     ctx.body = '提交成功'
   },
@@ -90,10 +101,42 @@ module.exports = {
     ctx.response.type = 'application/json'
     ctx.body = data
   },
+  deleteReserve: async (ctx, next) => {        
+    let db = config.db('reserve')
+    let data = await db.remove({"_id": ctx.request.body._id})
+    ctx.response.type = 'application/json'
+    ctx.body = '删除成功'
+  },
   getUserReserve: async(ctx, next) => {
     let db = config.db('reserve')    
     let data = await db.find({"userID": ctx.request.body.userID},{sort: {creatTime: -1}})
     ctx.response.type = 'application/json'
     ctx.body = data
-  }
+  },
+  addBanner: async (ctx, next) => {
+    let db = config.db('banner')
+    ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm:ss')
+    ctx.request.body.bannerID = shortid.generate()
+    db.insert(ctx.request.body)
+    ctx.response.type = 'application/json'
+    ctx.body = '提交成功'
+  },
+  getBannerList: async (ctx, next) => {
+    let db = config.db('banner')
+    let data = await db.find({})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
+  deleteBanner: async (ctx, next) => {        
+    let db = config.db('banner')
+    let data = await db.remove({"_id": ctx.request.body._id})
+    ctx.response.type = 'application/json'
+    ctx.body = '删除成功'
+  },
+  getBanner: async (ctx, next) => {
+    let db = config.db('banner')
+    let data = await db.find({"bannerID": ctx.request.body.bannerID})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
 }
