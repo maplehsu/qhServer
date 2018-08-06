@@ -21,6 +21,7 @@ router.get('/getBannerList', controller.getBannerList)
 router.get('/getPathUser', controller.getPathUser)
 router.get('/getOauth', controller.oauth)
 router.get('/getReserve', controller.getReserve)
+router.post('/tenPay', koaBody(), controller.tenPay)
 
 module.exports = app => {
   app.use(router.routes())

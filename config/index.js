@@ -29,7 +29,11 @@ module.exports = {
     const upload = multer({ storage: storage }); 
     return upload.single('file')
   },
-  appID: 'wxb6810f4880118c0b',
-  appSecret: 'e77a403e1619f33dda8a5ee83ab380ce',
-  wxUrl: 'http://www.izmqh.com/'
+  // appID: 'wxb6810f4880118c0b',
+  // appSecret: 'e77a403e1619f33dda8a5ee83ab380ce',
+  // wxUrl: 'http://h5.izmqh.com/'
+  // 测试账号
+  appID: 'wx5e1f8a34134f4960',
+  appSecret: 'c3d8748ee90df827ceea4c176287b27d',
+  wxUrl: 'http://192.168.1.109:8080/'
 }

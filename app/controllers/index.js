@@ -4,6 +4,15 @@ const moment = require('moment')
 const koa2Req = require('koa2-request');
 const shortid = require('shortid');
 
+var Payment = require('wechat-pay').Payment;
+var initConfig = {
+  partnerKey: "WtkUlbKeJ9466OhJoZVKN5Tnnr6UO67m",
+  appId: "wxb6810f4880118c0b",
+  mchId: "1510649961",
+  notifyUrl: 'h5.izmqh.com'
+};
+
+var payment = new Payment(initConfig);
 
 module.exports = {
   upload: async (ctx, next) => { 
@@ -139,4 +148,18 @@ module.exports = {
     ctx.response.type = 'application/json'
     ctx.body = data
   },
+  tenPay: async (ctx, next) => {     
+    var order = {
+      body: ctx.request.body.title,
+      attach: 'wx',
+      out_trade_no: 'xl' + shortid.generate(),
+      total_fee: ctx.request.body.fee * 100,
+      spbill_create_ip: '47.104.235.123',
+      openid: ctx.request.body.openId,
+      trade_type: 'JSAPI'
+    }
+    let payargs = await payment.getBrandWCPayRequestParams(order)
+    ctx.response.type = 'application/json'   
+    ctx.body = payargs
+  }
 }
