@@ -23,10 +23,9 @@ router.get('/getOauth', controller.oauth)
 router.get('/getSelectPath', controller.getSelectPath)
 router.get('/getReserve', controller.getReserve)
 router.post('/tenPay', koaBody(), controller.tenPay)
-
+    // 添加攻略
+router.post("/addStrategy", koaBody(), controller.addStrategy)
 module.exports = app => {
-  app.use(router.routes())
-  app.use(router.allowedMethods())
+    app.use(router.routes())
+    app.use(router.allowedMethods())
 }
-
-
