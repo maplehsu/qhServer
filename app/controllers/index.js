@@ -38,6 +38,13 @@ module.exports = {
     ctx.response.type = 'application/json'
     ctx.body = data
   },
+  getSelectPath: async (ctx, next) => {
+    console.log(ctx);
+    // let db = config.db('xianlu')
+    // let data = await db.find({},{"content":0}).sort({"creatTime": -1}).limit(3)
+    // ctx.response.type = 'application/json'
+    // ctx.body = data
+  },
   getPathList: async (ctx, next) => {
     let db = config.db('xianlu')
     let data = await db.find({}, {content: 0})

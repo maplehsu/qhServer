@@ -20,6 +20,7 @@ router.get('/getPathList', controller.getPathList)
 router.get('/getBannerList', controller.getBannerList)
 router.get('/getPathUser', controller.getPathUser)
 router.get('/getOauth', controller.oauth)
+router.get('/getSelectPath', controller.getSelectPath)
 router.get('/getReserve', controller.getReserve)
 router.post('/tenPay', koaBody(), controller.tenPay)
 
