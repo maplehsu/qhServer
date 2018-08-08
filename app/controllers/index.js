@@ -177,5 +177,9 @@ module.exports = {
     let payargs = await payment.getBrandWCPayRequestParams(order)
     ctx.response.type = 'application/json'   
     ctx.body = payargs
+  },
+  addStrategy: async(ct, next) => {
+      let db = config.db('strategy')
+      ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm')
   }
 }
