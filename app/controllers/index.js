@@ -48,11 +48,19 @@ module.exports = {
         $sort: {"creatTime": -1}
       },
       {
+      	$skip: ctx.request.query.skip ? parseInt(ctx.request.query.skip) : 0
+      },
+      {
         $limit: parseInt(ctx.request.query.limit)
       }
     ])
+    let total = await db.count()
+    let list = {
+      data: data,
+      total: total
+    }
     ctx.response.type = 'application/json'
-    ctx.body = data
+    ctx.body = list
   },
   getPathList: async (ctx, next) => {
     let db = config.db('xianlu')
