@@ -187,8 +187,37 @@ module.exports = {
     ctx.body = payargs
   },
   // 添加攻略
-  addStrategy: async(ct, next) => {
+  addStrategy: async(ctx, next) => {
       let db = config.db('strategy')
       ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm')
+      ctx.request.body.strategyId = shortid.generate()
+      await db.insert(ctx.request.body)
+      ctx.response.type = 'application/json'
+      ctx.body = '添加攻略成功'
+  },
+  // 获取攻略列表
+  getStrategy: async (ctx, next) => {
+    let db = config.db('strategy')
+    let data = await db.find({})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
+  getStrategyById: async (ctx, next) => {
+    let db = config.db('strategy')
+    let data = await db.find({"strategyId": ctx.request.body.strategyId})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
+  editStrategy: async (ctx, next) => {
+    let db = config.db('strategy')
+    let data = await db.update({"strategyId": ctx.request.body.strategyId}, {$set: ctx.request.body})
+    ctx.response.type = 'application/json'
+    ctx.body = "修改成功"
+  },
+  deleteStrategy: async (ctx, next) => {
+    let db = config.db('strategy')
+    let data = await db.remove({"strategyId": ctx.request.body.strategyId})
+    ctx.response.type = 'application/json'
+    ctx.body = "删除成功"
   }
 }
