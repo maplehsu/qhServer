@@ -186,6 +186,7 @@ module.exports = {
     ctx.response.type = 'application/json'   
     ctx.body = payargs
   },
+  // 添加攻略
   addStrategy: async(ct, next) => {
       let db = config.db('strategy')
       ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm')
