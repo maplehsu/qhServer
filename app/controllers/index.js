@@ -191,6 +191,7 @@ module.exports = {
       let db = config.db('strategy')
       ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm')
       ctx.request.body.strategyId = shortid.generate()
+      ctx.request.body.random = Math.random()
       await db.insert(ctx.request.body)
       ctx.response.type = 'application/json'
       ctx.body = '添加攻略成功'
@@ -219,5 +220,40 @@ module.exports = {
     let data = await db.remove({"strategyId": ctx.request.body.strategyId})
     ctx.response.type = 'application/json'
     ctx.body = "删除成功"
+  },
+
+  getSelectStrategy: async (ctx, next) => {
+    let db = config.db('strategy')
+    let data = await db.aggregate([
+      {
+      	$project: {"content":0}
+      },
+      {
+        $sort: {"creatTime": -1}
+      },
+      {
+      	$skip: ctx.request.query.skip ? parseInt(ctx.request.query.skip) : 0
+      },
+      {
+        $limit: parseInt(ctx.request.query.limit)
+      }
+    ])
+    let total = await db.count()
+    let list = {
+      data: data,
+      total: total
+    }
+    ctx.response.type = 'application/json'
+    ctx.body = list
+  },
+  getRandomStrategy: async (ctx, next) => {
+    let db = config.db("strategy")
+    var random=Math.random();
+    var result= await db.findOne({"random":{"$lt":random}});
+    if(result==null){
+        result= await db.findOne({"random":{"$gte":random}});
+    }
+    ctx.response.type = "application/json"
+    ctx.body = result
   }
 }

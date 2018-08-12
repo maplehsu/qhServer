@@ -28,6 +28,8 @@ router.get("/getStrategy",controller.getStrategy)
 router.post("/getStrategyById", koaBody(), controller.getStrategyById)
 router.post("/editStrategy", koaBody(), controller.editStrategy)
 router.post("/deleteStrategy", koaBody(), controller.deleteStrategy)
+router.get("/getSelectStrategy", koaBody(), controller.getSelectStrategy)
+router.get("/getRandomStrategy", controller.getRandomStrategy)
 module.exports = app => {
     app.use(router.routes())
     app.use(router.allowedMethods())
