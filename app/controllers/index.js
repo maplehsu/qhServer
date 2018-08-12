@@ -26,6 +26,12 @@ module.exports = {
     ctx.response.type = 'application/json'
     ctx.body = '修改成功'
   },
+  editLoop: async (ctx, next) => {
+    let db = config.db('loop')
+    let data = await db.update({"_id": ctx.request.body._id}, {$set: ctx.request.body})
+    ctx.response.type = 'application/json'
+    ctx.body = '修改成功'
+  },
   deletePath: async (ctx, next) => {        
     let db = config.db('xianlu')
     let data = await db.remove({"_id": ctx.request.body._id})
@@ -35,6 +41,19 @@ module.exports = {
   getPath: async (ctx, next) => {
     let db = config.db('xianlu')
     let data = await db.find({"pathID": ctx.request.body.pathID})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
+  getRandomPath: async (ctx, next) => {
+    let db = config.db('xianlu')
+    let data = await db.aggregate([
+      {
+        $project: {"content": 0},
+      }, 
+      {
+        $sample: {"size": ctx.request.query.size?parseInt(ctx.request.query.size): 5}
+      }
+    ])
     ctx.response.type = 'application/json'
     ctx.body = data
   },
@@ -99,6 +118,35 @@ module.exports = {
     db.insert(ctx.request.body)
     ctx.response.type = 'application/json'
     ctx.body = '提交成功'
+  },
+  addLoop: async (ctx, next) => {
+    let db = config.db('loop')
+    ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm:ss')
+    ctx.request.body.loopID = shortid.generate()
+    if(ctx.request.body.adData.name == '' && ctx.request.body.adData.wechat == '' && ctx.request.body.adData.phone == '' && ctx.request.body.adData.email =='') {
+      delete ctx.request.body.adData
+    }
+    db.insert(ctx.request.body)
+    ctx.response.type = 'application/json'
+    ctx.body = '提交成功'
+  },
+  getLoopList: async (ctx, next) => {
+    let db = config.db('loop')
+    let data = await db.find({})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
+  getLoop: async (ctx, next) => {
+    let db = config.db('loop')
+    let data = await db.find({"loopID": ctx.request.body.loopID})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
+  deleteLoop: async (ctx, next) => {        
+    let db = config.db('loop')
+    let data = await db.remove({"_id": ctx.request.body._id})
+    ctx.response.type = 'application/json'
+    ctx.body = '删除成功'
   },
   oauth: async (ctx, next) => {
     const { request: req, response: res } = ctx
