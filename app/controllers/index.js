@@ -57,11 +57,48 @@ module.exports = {
     ctx.response.type = 'application/json'
     ctx.body = data
   },
+  getRandomLoop: async (ctx, next) => {
+    let db = config.db('loop')
+    let data = await db.aggregate([
+      {
+        $project: {"loopList": 0},
+      }, 
+      {
+        $sample: {"size": ctx.request.query.size?parseInt(ctx.request.query.size): 5}
+      }
+    ])
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
   getSelectPath: async (ctx, next) => {
     let db = config.db('xianlu')
     let data = await db.aggregate([
       {
       	$project: {"content":0}
+      },
+      {
+        $sort: {"creatTime": -1}
+      },
+      {
+      	$skip: ctx.request.query.skip ? parseInt(ctx.request.query.skip) : 0
+      },
+      {
+        $limit: parseInt(ctx.request.query.limit)
+      }
+    ])
+    let total = await db.count()
+    let list = {
+      data: data,
+      total: total
+    }
+    ctx.response.type = 'application/json'
+    ctx.body = list
+  },
+  getSelectLoop: async (ctx, next) => {
+    let db = config.db('loop')
+    let data = await db.aggregate([
+      {
+      	$project: {"loopList":0}
       },
       {
         $sort: {"creatTime": -1}
