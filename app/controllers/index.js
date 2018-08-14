@@ -20,8 +20,20 @@ module.exports = {
       filename: ctx.req.file.filename
     }  
   },
+  getCarList: async (ctx, next) => {
+    let db = config.db('car')
+    let data = await db.find({})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
   editPath: async (ctx, next) => {
     let db = config.db('xianlu')
+    let data = await db.update({"_id": ctx.request.body._id}, {$set: ctx.request.body})
+    ctx.response.type = 'application/json'
+    ctx.body = '修改成功'
+  },
+  editCar: async (ctx, next) => {
+    let db = config.db('car')
     let data = await db.update({"_id": ctx.request.body._id}, {$set: ctx.request.body})
     ctx.response.type = 'application/json'
     ctx.body = '修改成功'
@@ -38,9 +50,21 @@ module.exports = {
     ctx.response.type = 'application/json'
     ctx.body = '删除成功'
   },
+  deleteCar: async (ctx, next) => {        
+    let db = config.db('car')
+    let data = await db.remove({"_id": ctx.request.body._id})
+    ctx.response.type = 'application/json'
+    ctx.body = '删除成功'
+  },
   getPath: async (ctx, next) => {
     let db = config.db('xianlu')
     let data = await db.find({"pathID": ctx.request.body.pathID})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
+  getCar: async (ctx, next) => {
+    let db = config.db('car')
+    let data = await db.find({"carID": ctx.request.body.carID})
     ctx.response.type = 'application/json'
     ctx.body = data
   },
@@ -152,6 +176,14 @@ module.exports = {
     let db = config.db('xianlu')
     ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm:ss')
     ctx.request.body.pathID = shortid.generate()
+    db.insert(ctx.request.body)
+    ctx.response.type = 'application/json'
+    ctx.body = '提交成功'
+  },
+  addCar: async (ctx, next) => {
+    let db = config.db('car')
+    ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm:ss')
+    ctx.request.body.carID = shortid.generate()
     db.insert(ctx.request.body)
     ctx.response.type = 'application/json'
     ctx.body = '提交成功'
