@@ -257,6 +257,18 @@ module.exports = {
     ctx.response.type = 'application/json'
     ctx.body = data
   },
+  getContactList: async (ctx, next) => {
+    let db = config.db('contact')
+    let data = await db.find({})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
+  getLoopReserveList: async (ctx, next) => {
+    let db = config.db('loopReserve')
+    let data = await db.find({})
+    ctx.response.type = 'application/json'
+    ctx.body = data
+  },
   tenPay: async (ctx, next) => {     
     var order = {
       body: ctx.request.body.title,
@@ -306,7 +318,18 @@ module.exports = {
     ctx.response.type = 'application/json'
     ctx.body = "删除成功"
   },
-
+  deleteContactList: async (ctx, next) => {
+    let db = config.db('contact')
+    let data = await db.remove({"_id": ctx.request.body._id})
+    ctx.response.type = 'application/json'
+    ctx.body = "删除成功"
+  },
+  deleteLoopReserveList: async (ctx, next) => {
+    let db = config.db('loopReserve')
+    let data = await db.remove({"_id": ctx.request.body._id})
+    ctx.response.type = 'application/json'
+    ctx.body = "删除成功"
+  },
   getSelectStrategy: async (ctx, next) => {
     let db = config.db('strategy')
     let data = await db.aggregate([
@@ -340,5 +363,21 @@ module.exports = {
     }
     ctx.response.type = "application/json"
     ctx.body = result
+  },
+  addContact: async (ctx, next) => {
+    let db = config.db('contact')
+    ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm')
+    ctx.request.body.contactId = shortid.generate()
+    await db.insert(ctx.request.body)
+    ctx.response.type = 'application/json'
+    ctx.body = '添加成功'
+  },
+  addLoopReserve: async (ctx, next) => {
+    let db = config.db('loopReserve')
+    ctx.request.body.creatTime = moment().format('YYYY-MM-DD kk:mm')
+    ctx.request.body.loopReserveId = shortid.generate()
+    await db.insert(ctx.request.body)
+    ctx.response.type = 'application/json'
+    ctx.body = '添加成功'
   }
 }
